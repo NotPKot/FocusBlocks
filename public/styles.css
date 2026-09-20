@@ -1,0 +1,344 @@
+:root {
+  --color-fondo: #f4f1ea;
+  --color-tarjeta: #ffffff;
+  --color-texto: #2f2a26;
+  --color-texto-suave: #6b6359;
+  --color-principal: #3a6ea5;
+  --color-principal-oscuro: #2d5781;
+  --color-borde: #d9d3c7;
+  --color-peligro: #b3402e;
+  --color-enfoque: #e0912f;
+  --radio: 12px;
+  --tamano-base: 1.05rem;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-fondo);
+  color: var(--color-texto);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: var(--tamano-base);
+  line-height: 1.6;
+}
+
+body.fuente-verdana {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+body.fuente-comic {
+  font-family: "Comic Sans MS", "Comic Sans", Verdana, sans-serif;
+}
+
+body.fuente-georgia {
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+/* ---- Barra superior ---- */
+
+.barra {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  background: var(--color-principal);
+  color: #fff;
+}
+
+.titulo-app {
+  margin: 0;
+  font-size: 1.5rem;
+  letter-spacing: 0.02em;
+}
+
+.fuentes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.etiqueta {
+  font-size: 0.9rem;
+  opacity: 0.9;
+  margin-right: 0.25rem;
+}
+
+.btn-fuente {
+  font: inherit;
+  font-size: 0.95rem;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.15);
+  border: 2px solid transparent;
+  border-radius: 999px;
+  padding: 0.35rem 0.9rem;
+  cursor: pointer;
+}
+
+.btn-fuente:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.btn-fuente.activa {
+  background: #fff;
+  color: var(--color-principal);
+  border-color: var(--color-enfoque);
+}
+
+/* ---- Zonas principales ---- */
+
+.vista {
+  display: grid;
+  grid-template-columns: minmax(260px, 340px) 1fr;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.25rem;
+  gap: 1.25rem;
+  min-height: calc(100vh - 120px);
+}
+
+.panel-listas,
+.panel-editor {
+  background: var(--color-tarjeta);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+  padding: 1.1rem;
+}
+
+.cabecera-panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.subtitulo {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+/* ---- Botones ---- */
+
+.boton-principal,
+.boton-guardar {
+  font: inherit;
+  font-size: 1rem;
+  color: #fff;
+  background: var(--color-principal);
+  border: none;
+  border-radius: 999px;
+  padding: 0.55rem 1.1rem;
+  cursor: pointer;
+}
+
+.boton-principal:hover,
+.boton-guardar:hover {
+  background: var(--color-principal-oscuro);
+}
+
+.boton-volver {
+  font: inherit;
+  font-size: 1rem;
+  background: transparent;
+  border: 2px solid var(--color-borde);
+  border-radius: 999px;
+  padding: 0.45rem 1rem;
+  cursor: pointer;
+  color: var(--color-texto);
+}
+
+.boton-volver:hover {
+  border-color: var(--color-texto-suave);
+}
+
+.boton-peligro {
+  font: inherit;
+  font-size: 0.95rem;
+  color: var(--color-peligro);
+  background: transparent;
+  border: 2px solid var(--color-peligro);
+  border-radius: 999px;
+  padding: 0.4rem 0.9rem;
+  cursor: pointer;
+}
+
+.boton-peligro:hover {
+  background: var(--color-peligro);
+  color: #fff;
+}
+
+/* ---- Lista de notas ---- */
+
+.lista-notas {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.item-nota {
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  background: var(--color-fondo);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  color: var(--color-texto);
+}
+
+.item-nota:hover,
+.item-nota:focus-visible {
+  border-color: var(--color-principal);
+  background: #ece8de;
+}
+
+.item-nota-titulo {
+  display: block;
+  font-size: 1.05rem;
+  font-weight: bold;
+}
+
+.item-nota-fecha {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--color-texto-suave);
+}
+
+.mensaje {
+  color: var(--color-texto-suave);
+  text-align: center;
+  padding: 1rem 0;
+}
+
+/* ---- Editor ---- */
+
+.cabecera-editor {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.etiqueta-campo {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: bold;
+  margin: 0.9rem 0 0.35rem;
+}
+
+.campo {
+  width: 100%;
+  font: inherit;
+  color: var(--color-texto);
+  background: #fff;
+  border: 2px solid var(--color-borde);
+  border-radius: 10px;
+  padding: 0.6rem 0.8rem;
+}
+
+.campo-titulo {
+  font-size: 1.15rem;
+}
+
+.campo-nota {
+  min-height: 40vh;
+  resize: vertical;
+  line-height: 1.7;
+}
+
+.fila-guardado {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.pista {
+  font-size: 0.9rem;
+  color: var(--color-texto-suave);
+}
+
+/* ---- Enfoque (accesible) ---- */
+
+:focus-visible {
+  outline: 3px solid var(--color-enfoque);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* ---- Mensaje de error ---- */
+
+.aviso-error {
+  position: fixed;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-peligro);
+  color: #fff;
+  padding: 0.7rem 1.2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  max-width: 90vw;
+  z-index: 10;
+}
+
+/* ---- Movimiento suave (opcional) ---- */
+
+@media (prefers-reduced-motion: no-preference) {
+  .aviso-error {
+    animation: aparecer 0.2s ease;
+  }
+}
+
+@keyframes aparecer {
+  from { opacity: 0; transform: translate(-50%, 8px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+/* ---- Pantallas chicas ---- */
+
+@media (max-width: 720px) {
+  .vista {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    padding: 0.75rem;
+  }
+
+  .barra {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .campo-nota {
+    min-height: 35vh;
+  }
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --color-fondo: #ffffff;
+    --color-borde: #000000;
+    --color-texto-suave: #000000;
+    --color-principal: #1a3a5c;
+  }
+
+  .item-nota,
+  .campo {
+    border-width: 3px;
+  }
+}

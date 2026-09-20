@@ -1,0 +1,13 @@
+{
+  "name": "focusblocks",
+  "version": "1.0.0",
+  "description": "Mis Notas - una app de notas simple y amigable",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=14"
+  },
+  "license": "MIT"
+}

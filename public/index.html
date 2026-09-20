@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mis Notas</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="barra">
+    <h1 class="titulo-app">Mis Notas</h1>
+
+    <nav class="fuentes" aria-label="Cambiar tipo de letra">
+      <span class="etiqueta" id="texto-fuente">Letra</span>
+      <button class="btn-fuente activa" type="button" data-fuente="arial" aria-pressed="true">Arial</button>
+      <button class="btn-fuente" type="button" data-fuente="verdana" aria-pressed="false">Verdana</button>
+      <button class="btn-fuente" type="button" data-fuente="comic" aria-pressed="false">Amable</button>
+      <button class="btn-fuente" type="button" data-fuente="georgia" aria-pressed="false">Georgia</button>
+    </nav>
+  </header>
+
+  <main class="vista" id="vista">
+    <section class="panel-listas" id="panel-listas">
+      <div class="cabecera-panel">
+        <h2 class="subtitulo">Tus notas</h2>
+        <button class="boton-principal" type="button" id="boton-nueva">+ Nota nueva</button>
+      </div>
+
+      <ul class="lista-notas" id="lista-notas" aria-live="polite"></ul>
+
+      <p class="mensaje" id="mensaje" hidden>
+        Aun no tienes notas. Toca "Nota nueva" para empezar.
+      </p>
+    </section>
+
+    <section class="panel-editor" id="panel-editor" hidden>
+      <div class="cabecera-editor">
+        <button class="boton-volver" type="button" id="boton-volver">&larr; Volver</button>
+        <span class="pista" id="pista-guardado">Listo</span>
+        <button class="boton-peligro" type="button" id="boton-borrar">Borrar nota</button>
+      </div>
+
+      <form id="form-nota">
+        <label class="etiqueta-campo" for="campo-titulo">Titulo</label>
+        <input
+          class="campo campo-titulo"
+          type="text"
+          id="campo-titulo"
+          name="titulo"
+          placeholder="Por ejemplo: lista de compras"
+          autocomplete="off"
+        />
+
+        <label class="etiqueta-campo" for="campo-nota">Tu nota</label>
+        <textarea
+          class="campo campo-nota"
+          id="campo-nota"
+          name="nota"
+          rows="10"
+          placeholder="Escribe aqui lo que quieras recordar..."
+        ></textarea>
+
+        <div class="fila-guardado">
+          <button class="boton-guardar" type="submit">Guardar</button>
+          <span class="pista" id="pista-fecha"></span>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <div class="aviso-error" id="aviso-error" role="alert" hidden></div>
+
+  <noscript>
+    <p class="mensaje">Esta app necesita JavaScript para funcionar.</p>
+  </noscript>
+
+  <script src="/app.js"></script>
+</body>
+</html>
