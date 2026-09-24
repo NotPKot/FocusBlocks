@@ -10,9 +10,11 @@ const mensaje = document.getElementById("mensaje");
 const aviso = document.getElementById("aviso-error");
 const formulario = document.getElementById("form-nota");
 const campoNota = document.getElementById("campo-nota");
+const campoTitulo = document.getElementById("campo-titulo");
 
 let notas = [];
 let notaActual = null;
+let modoNueva = false;
 let guardando = false;
 
 const ETIQUETAS_FECHA = new Intl.DateTimeFormat("es", {
@@ -23,6 +25,7 @@ const ETIQUETAS_FECHA = new Intl.DateTimeFormat("es", {
   minute: "2-digit",
 });
 
+// La nota viene del servidor, por eso la pido con fetch.
 async function pedir(url, opciones) {
   const respuesta = await fetch(url, opciones);
   if (!respuesta.ok) {
@@ -77,46 +80,50 @@ function pintarNotas() {
   });
 }
 
+// Cuando hago clic en una nota de la lista, la abro para leerla o editarla.
 function abrirNota(id) {
   const nota = notas.find((n) => n.id === id);
   if (!nota) return;
   notaActual = nota;
-  document.getElementById("campo-titulo").value = nota.titulo;
+  modoNueva = false;
+  campoTitulo.value = nota.titulo;
   campoNota.value = nota.contenido;
   textoFecha.textContent = nota.actualizada ? "Editada: " + fechaBonita(nota.actualizada) : "";
   pistaGuardado.textContent = "Listo";
   panelListas.hidden = true;
   panelEditor.hidden = false;
-  document.getElementById("campo-titulo").focus();
+  campoTitulo.focus();
+}
+
+// Una nota nueva todavia no se guarda: recien llega a la base de datos al darle a Guardar.
+function abrirNuevaNota() {
+  notaActual = null;
+  modoNueva = true;
+  campoTitulo.value = "";
+  campoNota.value = "";
+  textoFecha.textContent = "";
+  pistaGuardado.textContent = "";
+  panelListas.hidden = true;
+  panelEditor.hidden = false;
+  campoTitulo.focus();
 }
 
 function volverALista() {
   notaActual = null;
+  modoNueva = false;
   formulario.reset();
+  restaurarPlaceholder(campoNota);
+  restaurarPlaceholder(campoTitulo);
   panelEditor.hidden = true;
   panelListas.hidden = false;
 }
 
-async function crearNota() {
-  try {
-    const nota = await pedir("/api/notes", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ titulo: "", contenido: "" }),
-    });
-    notas.unshift(nota);
-    pintarNotas();
-    abrirNota(nota.id);
-  } catch (error) {
-    mostrarAviso(error.message);
-  }
-}
-
 formulario.addEventListener("submit", async (evento) => {
   evento.preventDefault();
-  if (!notaActual || guardando) return;
+  if (!notaActual && !modoNueva) return;
+  if (guardando) return;
 
-  const titulo = document.getElementById("campo-titulo").value.trim();
+  const titulo = campoTitulo.value.trim();
   const contenido = campoNota.value.trim();
   if (!titulo && !contenido) {
     mostrarAviso("Escribe algo antes de guardar.");
@@ -126,16 +133,27 @@ formulario.addEventListener("submit", async (evento) => {
   guardando = true;
   pistaGuardado.textContent = "Guardando...";
   try {
-    const actualizada = await pedir(`/api/notes/${notaActual.id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ titulo, contenido }),
-    });
-    const indice = notas.findIndex((n) => n.id === actualizada.id);
-    if (indice !== -1) notas[indice] = actualizada;
-    notaActual = actualizada;
+    let guardada;
+    if (modoNueva) {
+      guardada = await pedir("/api/notes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ titulo, contenido }),
+      });
+      notas.unshift(guardada);
+    } else {
+      guardada = await pedir(`/api/notes/${notaActual.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ titulo, contenido }),
+      });
+      const indice = notas.findIndex((n) => n.id === guardada.id);
+      if (indice !== -1) notas[indice] = guardada;
+    }
+    notaActual = guardada;
+    modoNueva = false;
     pintarNotas();
-    textoFecha.textContent = "Editada: " + fechaBonita(actualizada.actualizada);
+    textoFecha.textContent = "Editada: " + fechaBonita(guardada.actualizada);
     pistaGuardado.textContent = "Guardada";
   } catch (error) {
     mostrarAviso(error.message);
@@ -146,6 +164,10 @@ formulario.addEventListener("submit", async (evento) => {
 });
 
 botonBorrar.addEventListener("click", async () => {
+  if (modoNueva) {
+    volverALista();
+    return;
+  }
   if (!notaActual) return;
   if (!window.confirm("¿Seguro que quieres borrar esta nota? No se puede deshacer.")) return;
 
@@ -159,15 +181,30 @@ botonBorrar.addEventListener("click", async () => {
   }
 });
 
-botonNueva.addEventListener("click", crearNota);
+botonNueva.addEventListener("click", abrirNuevaNota);
 botonVolver.addEventListener("click", volverALista);
 
+// Con Ctrl + S guardo igual que si tocaras Guardar.
 document.addEventListener("keydown", (evento) => {
   if ((evento.ctrlKey || evento.metaKey) && evento.key === "s") {
     evento.preventDefault();
     if (!panelEditor.hidden) formulario.dispatchEvent(new Event("submit", { cancelable: true }));
   }
 });
+
+function restaurarPlaceholder(campo) {
+  const original = campo.dataset.placeholderOriginal;
+  if (original !== undefined) campo.setAttribute("placeholder", original);
+}
+
+// El texto gris es solo un ejemplo: al hacer clic desaparece y me deja escribir libre.
+function placeholderQueSeVa(campo) {
+  campo.dataset.placeholderOriginal = campo.getAttribute("placeholder") || "";
+  campo.addEventListener("focus", () => campo.setAttribute("placeholder", ""));
+  campo.addEventListener("blur", () => restaurarPlaceholder(campo));
+}
+placeholderQueSeVa(campoNota);
+placeholderQueSeVa(campoTitulo);
 
 function aplicarFuente(nombre) {
   document.body.className = "";
@@ -184,6 +221,35 @@ document.querySelectorAll(".btn-fuente").forEach((boton) => {
   boton.addEventListener("click", () => aplicarFuente(boton.dataset.fuente));
 });
 
+// El modo oscuro: al hacer clic en el boton cambio los colores y lo recuerdo para la proxima vez.
+const botonTema = document.getElementById("boton-tema");
+
+function pintarTema(oscuro) {
+  document.body.classList.toggle("dark", oscuro);
+  botonTema.textContent = oscuro ? "Modo claro" : "Modo oscuro";
+  botonTema.setAttribute("aria-pressed", String(oscuro));
+}
+
+botonTema.addEventListener("click", () => {
+  const oscuro = !document.body.classList.contains("dark");
+  pintarTema(oscuro);
+  localStorage.setItem("tema-mis-notas", oscuro ? "oscuro" : "claro");
+});
+
+function iniciarTema() {
+  const elegido = localStorage.getItem("tema-mis-notas");
+  if (elegido) {
+    pintarTema(elegido === "oscuro");
+    return;
+  }
+  const sensor = window.matchMedia("(prefers-color-scheme: dark)");
+  pintarTema(sensor.matches);
+  sensor.addEventListener("change", (evento) => {
+    if (!localStorage.getItem("tema-mis-notas")) pintarTema(evento.matches);
+  });
+}
+
+// Al cargar la pagina traigo todas mis notas guardadas en la base de datos.
 async function iniciar() {
   try {
     notas = await pedir("/api/notes");
@@ -193,6 +259,7 @@ async function iniciar() {
     mostrarAviso("No se pudo cargar tus notas: " + error.message);
   }
   aplicarFuente(localStorage.getItem("fuente-mis-notas") || "arial");
+  iniciarTema();
 }
 
 iniciar();

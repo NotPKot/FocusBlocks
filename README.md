@@ -7,6 +7,7 @@ Una aplicacion para guardar notas desde el navegador. Simple, tranquila y pensad
 - Guarda las notas en una base de datos local (un archivo simple en tu computadora).
 - Si cierras la app y la vuelves a abrir, tus notas siguen ahi.
 - Tiene un boton para cambiar el tipo de letra entre 4 opciones.
+- Tiene modo oscuro para que no canse la vista.
 - Colores calmados, botones grandes y texto que se lee facil.
 
 ## Requisitos
@@ -36,6 +37,8 @@ Para cerrar la app, vuelve a la terminal y presiona `Ctrl + C`.
 
 Truco: tambien puedes guardar con `Ctrl + S`.
 
+El texto gris que ves dentro de la nota es solo un ejemplo. Cuando haces clic, desaparece y te deja escribir tranquilo. Tu nota recien se guarda cuando tocas Guardar, asi que si vuelves sin escribir nada, no queda basura en la base de datos.
+
 ## Cambiar el tipo de letra
 
 Arriba a la derecha hay 4 botones:
@@ -46,6 +49,12 @@ Arriba a la derecha hay 4 botones:
 - **Georgia** — estilo libro con remates.
 
 La app recuerda cual elegiste para la proxima vez.
+
+## Modo oscuro
+
+Arriba a la derecha hay un boton que dice **"Modo oscuro"**. Tocalo cuando quieras colores tranquilos y oscuros (ideal para ambientes con poca luz). Al tocarlo de nuevo vuelves al modo claro.
+
+La app recuerda tu eleccion. Si nunca elegiste, usa la misma configuracion que tu computadora.
 
 ## Como funciona por dentro
 

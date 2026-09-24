@@ -8,8 +8,25 @@
   --color-borde: #d9d3c7;
   --color-peligro: #b3402e;
   --color-enfoque: #e0912f;
+  --color-hover: #ece8de;
+  --color-campo: #ffffff;
   --radio: 12px;
   --tamano-base: 1.05rem;
+}
+
+/* Modo oscuro: colores suaves para no cansar la vista. */
+body.dark {
+  --color-fondo: #1c1b19;
+  --color-tarjeta: #292622;
+  --color-texto: #e8e1d6;
+  --color-texto-suave: #a89f93;
+  --color-principal: #4a82b5;
+  --color-principal-oscuro: #5e97cc;
+  --color-borde: #3d3a35;
+  --color-peligro: #d9705a;
+  --color-enfoque: #f0a34f;
+  --color-hover: #332f2a;
+  --color-campo: #211f1c;
 }
 
 * {
@@ -60,6 +77,13 @@ body.fuente-georgia {
   letter-spacing: 0.02em;
 }
 
+.controles {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
 .fuentes {
   display: flex;
   flex-wrap: wrap;
@@ -73,7 +97,8 @@ body.fuente-georgia {
   margin-right: 0.25rem;
 }
 
-.btn-fuente {
+.btn-fuente,
+.btn-tema {
   font: inherit;
   font-size: 0.95rem;
   color: #fff;
@@ -84,7 +109,8 @@ body.fuente-georgia {
   cursor: pointer;
 }
 
-.btn-fuente:hover {
+.btn-fuente:hover,
+.btn-tema:hover {
   background: rgba(255, 255, 255, 0.28);
 }
 
@@ -203,7 +229,7 @@ body.fuente-georgia {
 .item-nota:hover,
 .item-nota:focus-visible {
   border-color: var(--color-principal);
-  background: #ece8de;
+  background: var(--color-hover);
 }
 
 .item-nota-titulo {
@@ -245,10 +271,15 @@ body.fuente-georgia {
   width: 100%;
   font: inherit;
   color: var(--color-texto);
-  background: #fff;
+  background: var(--color-campo);
   border: 2px solid var(--color-borde);
   border-radius: 10px;
   padding: 0.6rem 0.8rem;
+}
+
+.campo::placeholder {
+  color: var(--color-texto-suave);
+  opacity: 1;
 }
 
 .campo-titulo {
@@ -302,6 +333,16 @@ body.fuente-georgia {
 @media (prefers-reduced-motion: no-preference) {
   .aviso-error {
     animation: aparecer 0.2s ease;
+  }
+
+  body {
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+
+  .panel-listas,
+  .panel-editor,
+  .campo {
+    transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
   }
 }
 

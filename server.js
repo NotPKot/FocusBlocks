@@ -10,6 +10,7 @@ const PUBLIC_DIR = path.join(__dirname, "public");
 
 let notes = [];
 
+// Aqui cargo mis notas guardadas para que esten cuando abro la app de nuevo.
 function cargarNotas() {
   try {
     const datos = fs.readFileSync(DATA_FILE, "utf8");
@@ -20,6 +21,7 @@ function cargarNotas() {
   }
 }
 
+// Esta es la base de datos: un archivo de texto donde guardo todo.
 function guardarNotas() {
   if (!fs.existsSync(DATA_DIR)) {
     fs.mkdirSync(DATA_DIR, { recursive: true });
@@ -81,6 +83,7 @@ function servirArchivo(res, ruta) {
 
 cargarNotas();
 
+// Este es el servidor: de un lado guarda mis notas y del otro muestra la app.
 const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, `http://localhost:${PORT}`);
   const ruta = url.pathname;
